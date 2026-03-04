@@ -46,14 +46,14 @@ import app.aaps.core.interfaces.utils.DecimalFormatter
 import app.aaps.core.objects.extensions.iobCalc
 import app.aaps.core.ui.compose.AapsCard
 import app.aaps.core.ui.compose.AapsTheme
+import app.aaps.core.ui.compose.ElementType
+import app.aaps.core.ui.compose.color
 import app.aaps.core.ui.compose.LocalDateUtil
 import app.aaps.core.ui.compose.SelectableListToolbar
 import app.aaps.core.ui.compose.ToolbarConfig
 import app.aaps.core.ui.compose.dialogs.AapsSnackbarHost
 import app.aaps.core.ui.compose.dialogs.OkCancelDialog
-import app.aaps.core.ui.compose.icons.IcCalculator
-import app.aaps.core.ui.compose.icons.IcCarbs
-import app.aaps.core.ui.compose.icons.IcPumpCartridge
+import app.aaps.core.ui.compose.icon
 import app.aaps.core.ui.compose.icons.IcSmb
 import app.aaps.core.ui.compose.icons.Ns
 import app.aaps.core.ui.compose.icons.Pump
@@ -229,10 +229,10 @@ private fun MealLinkItem(
                         Box(modifier = Modifier.weight(1f))
 
                         Icon(
-                            imageVector = IcCalculator,
+                            imageVector = ElementType.BOLUS_WIZARD.icon(),
                             contentDescription = stringResource(app.aaps.core.ui.R.string.boluswizard),
                             modifier = Modifier.size(21.dp),
-                            tint = Color(AapsTheme.generalColors.calculator.value)
+                            tint = ElementType.BOLUS_WIZARD.color()
                         )
 
                         if (bcr.ids.nightscoutId != null) {
@@ -327,7 +327,7 @@ private fun MealLinkItem(
 
                             BS.Type.NORMAL  -> {
                                 Icon(
-                                    imageVector = IcCarbs,
+                                    imageVector = ElementType.CARBS.icon(),
                                     contentDescription = stringResource(app.aaps.core.ui.R.string.careportal_mealbolus),
                                     modifier = Modifier.size(21.dp)
                                 )
@@ -335,7 +335,7 @@ private fun MealLinkItem(
 
                             BS.Type.PRIMING -> {
                                 Icon(
-                                    imageVector = IcPumpCartridge,
+                                    imageVector = ElementType.FILL.icon(),
                                     contentDescription = stringResource(app.aaps.core.ui.R.string.prime_fill),
                                     modifier = Modifier.size(21.dp)
                                 )

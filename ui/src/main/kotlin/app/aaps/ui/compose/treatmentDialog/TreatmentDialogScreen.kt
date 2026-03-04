@@ -35,6 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.aaps.core.ui.compose.AapsTopAppBar
+import app.aaps.core.ui.compose.ElementType
+import app.aaps.core.ui.compose.color
+import app.aaps.core.ui.compose.icon
+import app.aaps.core.ui.compose.labelResId
 import app.aaps.core.ui.compose.NumberInputRow
 import app.aaps.core.ui.compose.dialogs.OkCancelDialog
 import app.aaps.ui.compose.components.DialogStatusBar
@@ -86,9 +90,9 @@ fun TreatmentDialogScreen(
         } else {
             val summaryLines = viewModel.buildConfirmationSummary()
             OkCancelDialog(
-                title = stringResource(CoreUiR.string.overview_treatment_label),
+                title = stringResource(ElementType.TREATMENT.labelResId()),
                 message = summaryLines.joinToString("<br/>"),
-                icon = Icons.Default.Add,
+                icon = ElementType.TREATMENT.icon(),
                 onConfirm = {
                     viewModel.confirmAndSave()
                     onNavigateBack()
@@ -101,9 +105,9 @@ fun TreatmentDialogScreen(
     // No action dialog
     if (showNoAction) {
         OkCancelDialog(
-            title = stringResource(CoreUiR.string.overview_treatment_label),
+            title = stringResource(ElementType.TREATMENT.labelResId()),
             message = stringResource(CoreUiR.string.no_action_selected),
-            icon = Icons.Default.Add,
+            icon = ElementType.TREATMENT.icon(),
             onConfirm = { showNoAction = false },
             onDismiss = { showNoAction = false }
         )
@@ -140,13 +144,13 @@ private fun TreatmentDialogContent(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            imageVector = Icons.Default.Add,
+                            imageVector = ElementType.TREATMENT.icon(),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = ElementType.TREATMENT.color(),
                             modifier = Modifier.size(24.dp)
                         )
                         Spacer(modifier = Modifier.padding(start = 8.dp))
-                        Text(stringResource(CoreUiR.string.overview_treatment_label))
+                        Text(stringResource(ElementType.TREATMENT.labelResId()))
                     }
                 },
                 navigationIcon = {

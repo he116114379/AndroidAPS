@@ -44,6 +44,8 @@ import app.aaps.core.interfaces.utils.DecimalFormatter
 import app.aaps.core.objects.extensions.iobCalc
 import app.aaps.core.ui.compose.AapsCard
 import app.aaps.core.ui.compose.AapsTheme
+import app.aaps.core.ui.compose.ElementType
+import app.aaps.core.ui.compose.color
 import app.aaps.core.ui.compose.LocalDateUtil
 import app.aaps.core.ui.compose.ToolbarConfig
 import app.aaps.core.ui.compose.dialogs.AapsSnackbarHost
@@ -248,7 +250,7 @@ private fun TempBasalItem(
                     text = stringResource(R.string.tbr_type_flag_extended),
                     modifier = Modifier.padding(start = 8.dp),
                     fontSize = 14.sp,
-                    color = Color(AapsTheme.elementColors.tempBasal.value)
+                    color = ElementType.TEMP_BASAL.color()
                 )
             }
 
@@ -257,7 +259,7 @@ private fun TempBasalItem(
                     text = stringResource(R.string.tbr_type_flag_suspended),
                     modifier = Modifier.padding(start = 8.dp),
                     fontSize = 14.sp,
-                    color = Color(AapsTheme.elementColors.tempBasal.value)
+                    color = ElementType.TEMP_BASAL.color()
                 )
             }
 
@@ -266,7 +268,7 @@ private fun TempBasalItem(
                     text = stringResource(R.string.tbr_type_flag_emulated_suspended),
                     modifier = Modifier.padding(start = 8.dp),
                     fontSize = 14.sp,
-                    color = Color(AapsTheme.elementColors.tempBasal.value)
+                    color = ElementType.TEMP_BASAL.color()
                 )
             }
 
@@ -275,7 +277,7 @@ private fun TempBasalItem(
                     text = stringResource(R.string.tbr_type_flag_superbolus),
                     modifier = Modifier.padding(start = 8.dp),
                     fontSize = 14.sp,
-                    color = Color(AapsTheme.elementColors.tempBasal.value)
+                    color = ElementType.TEMP_BASAL.color()
                 )
             }
 

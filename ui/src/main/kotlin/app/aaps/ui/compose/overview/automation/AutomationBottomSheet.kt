@@ -26,8 +26,9 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import app.aaps.core.ui.compose.AapsTheme
+import app.aaps.core.ui.compose.ElementType
 import app.aaps.core.ui.compose.TonalIcon
+import app.aaps.core.ui.compose.color
 import app.aaps.core.ui.compose.icons.IcAutomation
 import app.aaps.core.ui.R as CoreUiR
 
@@ -64,7 +65,7 @@ fun AutomationBottomSheet(
                 )
             }
 
-            val automationColor = AapsTheme.elementColors.automation
+            val automationColor = ElementType.AUTOMATION.color()
             automationItems.forEach { item ->
                 ListItem(
                     headlineContent = {

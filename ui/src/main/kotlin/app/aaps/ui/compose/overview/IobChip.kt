@@ -16,8 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.aaps.core.ui.compose.AapsSpacing
-import app.aaps.core.ui.compose.AapsTheme
-import app.aaps.core.ui.compose.icons.IcBolus
+import app.aaps.core.ui.compose.ElementType
+import app.aaps.core.ui.compose.color
+import app.aaps.core.ui.compose.icon
 import app.aaps.ui.compose.overview.graphs.IobUiState
 
 @Composable
@@ -29,7 +30,7 @@ internal fun IobChip(
     val hasValue = state.iobTotal != 0.0
     Surface(
         shape = RoundedCornerShape(AapsSpacing.chipCornerRadius),
-        color = if (hasValue) AapsTheme.elementColors.insulin.copy(alpha = 0.2f) else Color.Transparent,
+        color = if (hasValue) ElementType.INSULIN.color().copy(alpha = 0.2f) else Color.Transparent,
         modifier = modifier.height(AapsSpacing.chipHeight)
     ) {
         Row(
@@ -38,9 +39,9 @@ internal fun IobChip(
         ) {
             if (showIcon) {
                 Icon(
-                    imageVector = IcBolus,
+                    imageVector = ElementType.INSULIN.icon(),
                     contentDescription = null,
-                    tint = AapsTheme.elementColors.insulin,
+                    tint = ElementType.INSULIN.color(),
                     modifier = Modifier.size(AapsSpacing.chipIconSize)
                 )
             }

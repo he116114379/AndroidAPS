@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.aaps.core.ui.compose.ElementType
 
 /**
  * Coordinator composable that owns the manage bottom sheet visibility state,
@@ -17,19 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 fun ManageSheetHost(
     manageViewModel: ManageViewModel,
     isSimpleMode: Boolean,
-    // Shared callbacks (also used by OverviewScreen)
-    onProfileManagementClick: () -> Unit,
-    onTempTargetClick: () -> Unit,
-    // Manage-only callbacks
-    onTempBasalClick: () -> Unit,
-    onExtendedBolusClick: () -> Unit,
-    onBgCheckClick: () -> Unit,
-    onNoteClick: () -> Unit,
-    onExerciseClick: () -> Unit,
-    onQuestionClick: () -> Unit,
-    onAnnouncementClick: () -> Unit,
-    onSiteRotationClick: () -> Unit,
-    onQuickWizardClick: () -> Unit,
+    onElementClick: (ElementType) -> Unit,
     onActionsError: (String, String) -> Unit,
 ): ManageSheetState {
     var visible by remember { mutableStateOf(false) }
@@ -47,9 +36,7 @@ fun ManageSheetHost(
             cancelTempBasalText = manageState.cancelTempBasalText,
             cancelExtendedBolusText = manageState.cancelExtendedBolusText,
             customActions = manageState.customActions,
-            onProfileManagementClick = onProfileManagementClick,
-            onTempTargetClick = onTempTargetClick,
-            onTempBasalClick = onTempBasalClick,
+            onElementClick = onElementClick,
             onCancelTempBasalClick = {
                 manageViewModel.cancelTempBasal { success, comment ->
                     if (!success) {
@@ -57,7 +44,6 @@ fun ManageSheetHost(
                     }
                 }
             },
-            onExtendedBolusClick = onExtendedBolusClick,
             onCancelExtendedBolusClick = {
                 manageViewModel.cancelExtendedBolus { success, comment ->
                     if (!success) {
@@ -65,13 +51,6 @@ fun ManageSheetHost(
                     }
                 }
             },
-            onBgCheckClick = onBgCheckClick,
-            onNoteClick = onNoteClick,
-            onExerciseClick = onExerciseClick,
-            onQuestionClick = onQuestionClick,
-            onAnnouncementClick = onAnnouncementClick,
-            onSiteRotationClick = onSiteRotationClick,
-            onQuickWizardClick = onQuickWizardClick,
             onCustomActionClick = { manageViewModel.executeCustomAction(it.customActionType) }
         )
     }

@@ -47,8 +47,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import app.aaps.core.ui.compose.AapsTheme
 import app.aaps.core.ui.compose.AapsTopAppBar
+import app.aaps.core.ui.compose.ElementType
+import app.aaps.core.ui.compose.color
 import app.aaps.core.ui.compose.NumberInputRow
 import app.aaps.core.ui.compose.clearFocusOnTap
 import app.aaps.core.ui.compose.dialogs.OkCancelDialog
@@ -66,7 +67,8 @@ import java.text.DecimalFormat
 import app.aaps.core.interfaces.R as InterfacesR
 import app.aaps.core.keys.R as KeysR
 import app.aaps.core.ui.R as CoreUiR
-import app.aaps.core.ui.compose.icons.IcCarbs as CarbsIcon
+import app.aaps.core.ui.compose.icon
+import app.aaps.core.ui.compose.labelResId
 
 @Composable
 fun CarbsDialogScreen(
@@ -115,8 +117,8 @@ fun CarbsDialogScreen(
             OkCancelDialog(
                 title = stringResource(CoreUiR.string.carbs),
                 message = summaryLines.joinToString("<br/>"),
-                icon = CarbsIcon,
-                iconTint = AapsTheme.elementColors.carbs,
+                icon = ElementType.CARBS.icon(),
+                iconTint = ElementType.CARBS.color(),
                 onConfirm = {
                     viewModel.confirmAndSave()
                     onNavigateBack()
@@ -131,8 +133,8 @@ fun CarbsDialogScreen(
         OkCancelDialog(
             title = stringResource(CoreUiR.string.carbs),
             message = stringResource(CoreUiR.string.no_action_selected),
-            icon = CarbsIcon,
-            iconTint = AapsTheme.elementColors.carbs,
+            icon = ElementType.CARBS.icon(),
+            iconTint = ElementType.CARBS.color(),
             onConfirm = { showNoAction = false },
             onDismiss = { showNoAction = false }
         )
@@ -226,13 +228,13 @@ private fun CarbsDialogContent(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            imageVector = CarbsIcon,
+                            imageVector = ElementType.CARBS.icon(),
                             contentDescription = null,
-                            tint = AapsTheme.elementColors.carbs,
+                            tint = ElementType.CARBS.color(),
                             modifier = Modifier.size(24.dp)
                         )
                         Spacer(modifier = Modifier.padding(start = 8.dp))
-                        Text(stringResource(CoreUiR.string.carbs))
+                        Text(stringResource(ElementType.CARBS.labelResId()))
                     }
                 },
                 navigationIcon = {

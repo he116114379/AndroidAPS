@@ -92,7 +92,7 @@ fun QuickLauchConfigScreen(
 
     Column(modifier = modifier.fillMaxSize()) {
         AapsTopAppBar(
-            title = { Text(stringResource(R.string.quick_launch_configure)) },
+            title = { Text(stringResource(app.aaps.core.ui.R.string.quick_launch_configure)) },
             navigationIcon = {
                 IconButton(onClick = onNavigateBack) {
                     Icon(

@@ -22,7 +22,8 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
 import app.aaps.core.ui.compose.AapsSpacing
 import app.aaps.core.ui.compose.AapsTheme
-import app.aaps.core.ui.compose.icons.IcProfile
+import app.aaps.core.ui.compose.ElementType
+import app.aaps.core.ui.compose.icon
 
 @Composable
 fun ProfileChip(
@@ -50,7 +51,7 @@ fun ProfileChip(
                 modifier = Modifier.padding(horizontal = AapsSpacing.medium, vertical = AapsSpacing.small)
             ) {
                 Icon(
-                    imageVector = IcProfile,
+                    imageVector = ElementType.PROFILE_SWITCH.icon(),
                     contentDescription = null,
                     tint = contentColor,
                     modifier = Modifier.size(AapsSpacing.chipIconSize)

@@ -24,20 +24,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.aaps.core.interfaces.pump.actions.CustomAction
 import app.aaps.core.ui.compose.AapsTheme
+import app.aaps.core.ui.compose.ElementType
 import app.aaps.core.ui.compose.TonalIcon
-import app.aaps.core.ui.compose.icons.IcActivity
-import app.aaps.core.ui.compose.icons.IcAnnouncement
-import app.aaps.core.ui.compose.icons.IcBgCheck
+import app.aaps.core.ui.compose.color
+import app.aaps.core.ui.compose.descriptionResId
+import app.aaps.core.ui.compose.icon
+import app.aaps.core.ui.compose.labelResId
 import app.aaps.core.ui.compose.icons.IcCancelExtendedBolus
-import app.aaps.core.ui.compose.icons.IcExtendedBolus
-import app.aaps.core.ui.compose.icons.IcNote
-import app.aaps.core.ui.compose.icons.IcProfile
-import app.aaps.core.ui.compose.icons.IcQuestion
-import app.aaps.core.ui.compose.icons.IcQuickwizard
-import app.aaps.core.ui.compose.icons.IcSiteRotation
 import app.aaps.core.ui.compose.icons.IcTbrCancel
-import app.aaps.core.ui.compose.icons.IcTbrHigh
-import app.aaps.core.ui.compose.icons.IcTtHigh
 import app.aaps.core.ui.R as CoreUiR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,19 +51,9 @@ fun ManageBottomSheet(
     // Custom actions
     customActions: List<CustomAction>,
     // Callbacks
-    onProfileManagementClick: () -> Unit,
-    onTempTargetClick: () -> Unit,
-    onTempBasalClick: () -> Unit,
+    onElementClick: (ElementType) -> Unit,
     onCancelTempBasalClick: () -> Unit,
-    onExtendedBolusClick: () -> Unit,
     onCancelExtendedBolusClick: () -> Unit,
-    onBgCheckClick: () -> Unit,
-    onNoteClick: () -> Unit,
-    onExerciseClick: () -> Unit,
-    onQuestionClick: () -> Unit,
-    onAnnouncementClick: () -> Unit,
-    onSiteRotationClick: () -> Unit,
-    onQuickWizardClick: () -> Unit,
     onCustomActionClick: (CustomAction) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -90,19 +74,9 @@ fun ManageBottomSheet(
             cancelExtendedBolusText = cancelExtendedBolusText,
             customActions = customActions,
             onDismiss = onDismiss,
-            onProfileManagementClick = onProfileManagementClick,
-            onTempTargetClick = onTempTargetClick,
-            onTempBasalClick = onTempBasalClick,
+            onElementClick = onElementClick,
             onCancelTempBasalClick = onCancelTempBasalClick,
-            onExtendedBolusClick = onExtendedBolusClick,
             onCancelExtendedBolusClick = onCancelExtendedBolusClick,
-            onBgCheckClick = onBgCheckClick,
-            onNoteClick = onNoteClick,
-            onExerciseClick = onExerciseClick,
-            onQuestionClick = onQuestionClick,
-            onAnnouncementClick = onAnnouncementClick,
-            onSiteRotationClick = onSiteRotationClick,
-            onQuickWizardClick = onQuickWizardClick,
             onCustomActionClick = onCustomActionClick
         )
     }
@@ -120,19 +94,9 @@ internal fun ManageBottomSheetContent(
     cancelExtendedBolusText: String,
     customActions: List<CustomAction>,
     onDismiss: () -> Unit = {},
-    onProfileManagementClick: () -> Unit = {},
-    onTempTargetClick: () -> Unit = {},
-    onTempBasalClick: () -> Unit = {},
+    onElementClick: (ElementType) -> Unit = {},
     onCancelTempBasalClick: () -> Unit = {},
-    onExtendedBolusClick: () -> Unit = {},
     onCancelExtendedBolusClick: () -> Unit = {},
-    onBgCheckClick: () -> Unit = {},
-    onNoteClick: () -> Unit = {},
-    onExerciseClick: () -> Unit = {},
-    onQuestionClick: () -> Unit = {},
-    onAnnouncementClick: () -> Unit = {},
-    onSiteRotationClick: () -> Unit = {},
-    onQuickWizardClick: () -> Unit = {},
     onCustomActionClick: (CustomAction) -> Unit = {}
 ) {
     Column(
@@ -145,74 +109,61 @@ internal fun ManageBottomSheetContent(
 
         // Profile Management
         ManageItem(
-            text = stringResource(CoreUiR.string.profile_management),
-            description = stringResource(CoreUiR.string.manage_profile_desc),
-            iconPainter = rememberVectorPainter(IcProfile),
-            color = AapsTheme.elementColors.profileSwitch,
+            elementType = ElementType.PROFILE_MANAGEMENT,
             onDismiss = onDismiss,
-            onClick = onProfileManagementClick
+            onElementClick = onElementClick
         )
 
         // Temp Target
         if (showTempTarget) {
             ManageItem(
-                text = stringResource(CoreUiR.string.temp_target_management),
-                description = stringResource(CoreUiR.string.manage_temp_target_desc),
-                iconPainter = rememberVectorPainter(IcTtHigh),
-                color = AapsTheme.elementColors.tempTarget,
+                elementType = ElementType.TEMP_TARGET_MANAGEMENT,
                 onDismiss = onDismiss,
-                onClick = onTempTargetClick
+                onElementClick = onElementClick
             )
         }
 
         ManageItem(
-            text = stringResource(CoreUiR.string.quickwizard_managemnt),
-            description = stringResource(CoreUiR.string.manage_quickwizard_desc),
-            iconPainter = rememberVectorPainter(IcQuickwizard),
-            color = AapsTheme.elementColors.carbs,
+            elementType = ElementType.QUICK_WIZARD_MANAGEMENT,
             onDismiss = onDismiss,
-            onClick = onQuickWizardClick
+            onElementClick = onElementClick
         )
 
         // Temp Basal or Cancel Temp Basal
         if (showCancelTempBasal) {
+            val cancelColor = ElementType.TEMP_BASAL.color()
             ManageItem(
                 text = cancelTempBasalText,
-                description = null,
                 iconPainter = rememberVectorPainter(IcTbrCancel),
-                color = AapsTheme.elementColors.tempBasal,
+                color = cancelColor,
                 onDismiss = onDismiss,
                 onClick = onCancelTempBasalClick
             )
         } else if (showTempBasal) {
             ManageItem(
+                elementType = ElementType.TEMP_BASAL,
                 text = stringResource(CoreUiR.string.tempbasal_button),
-                description = stringResource(CoreUiR.string.manage_temp_basal_desc),
-                iconPainter = rememberVectorPainter(IcTbrHigh),
-                color = AapsTheme.elementColors.tempBasal,
                 onDismiss = onDismiss,
-                onClick = onTempBasalClick
+                onElementClick = onElementClick
             )
         }
 
         // Extended Bolus or Cancel Extended Bolus
         if (showCancelExtendedBolus) {
+            val cancelColor = ElementType.EXTENDED_BOLUS.color()
             ManageItem(
                 text = cancelExtendedBolusText,
-                description = null,
                 iconPainter = rememberVectorPainter(IcCancelExtendedBolus),
-                color = AapsTheme.elementColors.extendedBolus,
+                color = cancelColor,
                 onDismiss = onDismiss,
                 onClick = onCancelExtendedBolusClick
             )
         } else if (showExtendedBolus) {
             ManageItem(
+                elementType = ElementType.EXTENDED_BOLUS,
                 text = stringResource(CoreUiR.string.extended_bolus_button),
-                description = stringResource(CoreUiR.string.manage_extended_bolus_desc),
-                iconPainter = rememberVectorPainter(IcExtendedBolus),
-                color = AapsTheme.elementColors.extendedBolus,
                 onDismiss = onDismiss,
-                onClick = onExtendedBolusClick
+                onElementClick = onElementClick
             )
         }
 
@@ -222,43 +173,33 @@ internal fun ManageBottomSheetContent(
             SectionHeader(stringResource(CoreUiR.string.careportal))
 
             ManageItem(
-                text = stringResource(CoreUiR.string.careportal_bgcheck),
-                iconPainter = rememberVectorPainter(IcBgCheck),
-                color = AapsTheme.elementColors.bgCheck,
+                elementType = ElementType.BG_CHECK,
                 onDismiss = onDismiss,
-                onClick = onBgCheckClick,
+                onElementClick = onElementClick,
                 coloredText = false
             )
             ManageItem(
-                text = stringResource(CoreUiR.string.careportal_note),
-                iconPainter = rememberVectorPainter(IcNote),
-                color = AapsTheme.elementColors.careportal,
+                elementType = ElementType.NOTE,
                 onDismiss = onDismiss,
-                onClick = onNoteClick,
+                onElementClick = onElementClick,
                 coloredText = false
             )
             ManageItem(
-                text = stringResource(CoreUiR.string.careportal_exercise),
-                iconPainter = rememberVectorPainter(IcActivity),
-                color = AapsTheme.elementColors.exercise,
+                elementType = ElementType.EXERCISE,
                 onDismiss = onDismiss,
-                onClick = onExerciseClick,
+                onElementClick = onElementClick,
                 coloredText = false
             )
             ManageItem(
-                text = stringResource(CoreUiR.string.careportal_question),
-                iconPainter = rememberVectorPainter(IcQuestion),
-                color = AapsTheme.elementColors.careportal,
+                elementType = ElementType.QUESTION,
                 onDismiss = onDismiss,
-                onClick = onQuestionClick,
+                onElementClick = onElementClick,
                 coloredText = false
             )
             ManageItem(
-                text = stringResource(CoreUiR.string.careportal_announcement),
-                iconPainter = rememberVectorPainter(IcAnnouncement),
-                color = AapsTheme.elementColors.announcement,
+                elementType = ElementType.ANNOUNCEMENT,
                 onDismiss = onDismiss,
-                onClick = onAnnouncementClick,
+                onElementClick = onElementClick,
                 coloredText = false
             )
         }
@@ -267,21 +208,17 @@ internal fun ManageBottomSheetContent(
         HorizontalDivider(modifier = Modifier.padding(start = 56.dp))
         SectionHeader(stringResource(CoreUiR.string.tools))
 
-        val toolsColor = MaterialTheme.colorScheme.primary
         ManageItem(
-            text = stringResource(CoreUiR.string.site_rotation),
-            description = stringResource(CoreUiR.string.manage_site_rotation_desc),
-            iconPainter = rememberVectorPainter(IcSiteRotation),
-            color = toolsColor,
+            elementType = ElementType.SITE_ROTATION,
             onDismiss = onDismiss,
-            onClick = onSiteRotationClick
+            onElementClick = onElementClick
         )
         // Section: Pump actions (only if non-empty)
         if (customActions.isNotEmpty()) {
             HorizontalDivider(modifier = Modifier.padding(start = 56.dp))
             SectionHeader(stringResource(CoreUiR.string.pump_actions))
 
-            val pumpColor = AapsTheme.elementColors.pump
+            val pumpColor = ElementType.PUMP.color()
             customActions.forEach { action ->
                 ManageItem(
                     text = stringResource(action.name),
@@ -302,6 +239,34 @@ private fun SectionHeader(text: String) {
         style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+    )
+}
+
+/**
+ * ManageItem that derives icon, color, label, and description from [ElementType].
+ * Fires [onElementClick] with the element type — caller handles protection + navigation.
+ * Custom [text] overrides the ElementType label when provided.
+ */
+@Composable
+private fun ManageItem(
+    elementType: ElementType,
+    onDismiss: () -> Unit,
+    onElementClick: (ElementType) -> Unit,
+    text: String? = null,
+    coloredText: Boolean = true
+) {
+    val color = elementType.color()
+    val label = text ?: stringResource(elementType.labelResId())
+    val descResId = elementType.descriptionResId()
+    val description = if (descResId != 0) stringResource(descResId) else null
+    ManageItem(
+        text = label,
+        iconPainter = rememberVectorPainter(elementType.icon()),
+        color = color,
+        onDismiss = onDismiss,
+        onClick = { onElementClick(elementType) },
+        description = description,
+        coloredText = coloredText
     )
 }
 

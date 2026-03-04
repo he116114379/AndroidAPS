@@ -23,8 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.aaps.core.ui.compose.AapsSpacing
-import app.aaps.core.ui.compose.AapsTheme
-import app.aaps.core.ui.compose.icons.IcCarbs
+import app.aaps.core.ui.compose.ElementType
+import app.aaps.core.ui.compose.color
+import app.aaps.core.ui.compose.icon
 import app.aaps.ui.compose.overview.graphs.CobUiState
 
 @Composable
@@ -52,7 +53,7 @@ internal fun CobChip(
     val hasValue = state.cobValue != 0.0
     Surface(
         shape = RoundedCornerShape(AapsSpacing.chipCornerRadius),
-        color = if (hasValue) AapsTheme.elementColors.carbs.copy(alpha = 0.2f) else Color.Transparent,
+        color = if (hasValue) ElementType.COB.color().copy(alpha = 0.2f) else Color.Transparent,
         modifier = modifier
             .heightIn(min = AapsSpacing.chipHeight)
             .then(alphaModifier)
@@ -63,9 +64,9 @@ internal fun CobChip(
         ) {
             if (showIcon) {
                 Icon(
-                    imageVector = IcCarbs,
+                    imageVector = ElementType.COB.icon(),
                     contentDescription = null,
-                    tint = AapsTheme.elementColors.carbs,
+                    tint = ElementType.COB.color(),
                     modifier = Modifier.size(AapsSpacing.chipIconSize)
                 )
             }

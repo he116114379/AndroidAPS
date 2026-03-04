@@ -4,34 +4,9 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 /**
- * Color scheme for treatment tab icons.
- * Provides consistent color coding for different treatment types.
- *
- * **Usage:**
- * - TreatmentsActivity tab icons
- * - Treatment-related UI elements
- *
- * **Color Assignment:**
- * - bolusCarbs: Orange - Bolus and carbohydrate entries
- * - extendedBolus: Purple - Extended bolus deliveries
- * - tempBasal: Blue/Cyan - Temporary basal rate adjustments
- * - tempTarget: Green - Temporary blood glucose targets
- * - profileSwitch: Black/White - Profile changes
- * - careportal: Yellow/Orange - Careportal entries and notes
- * - runningMode: Yellow/Orange - Running mode changes
- * - userEntry: Green - User action log entries
- *
- * Colors match the existing theme attribute colors for consistency with the rest of the app.
- *
- * @property carbs Color for bolus and carbs icon
- * @property extendedBolus Color for extended bolus icon
- * @property tempBasal Color for temporary basal icon
- * @property tempTarget Color for temp target icon
- * @property profileSwitch Color for profile switch icon
- * @property careportal Color for careportal/note icon
- * @property runningMode Color for running mode icon
- * @property userEntry Color for user entry icon
- * @property automation Color for automation action items
+ * Color palette for UI elements.
+ * Provides consistent color coding for element types, display indicators, and graph overlays.
+ * Action-type colors are mapped via [ElementType.color]; graph-only colors are used directly.
  */
 data class ElementColors(
     val insulin: Color,
@@ -40,12 +15,12 @@ data class ElementColors(
     val tempBasal: Color,
     val tempTarget: Color,
     val profileSwitch: Color,
-    val careportal: Color,
+    val careportal: Color, // Deprecated: use note or question instead. Remove after migration.
     val runningMode: Color,
     val userEntry: Color,
-    val loop: Color,  // Additional UserEntry for loop
-    val pump: Color,  // Additional UserEntry for pump
-    val aaps: Color,  // Additional UserEntry for AAPS
+    val loop: Color,
+    val pump: Color,
+    val aaps: Color,
     val cgmXdrip: Color,
     val cgmDex: Color,
     val calibration: Color,
@@ -54,16 +29,27 @@ data class ElementColors(
     val exercise: Color,
     val announcement: Color,
     val cob: Color,
-    // Running mode belt graph background colors
+    val sensitivity: Color,
+    val automation: Color,
+    // New fields for ElementType
+    val bolusWizard: Color,
+    val note: Color,
+    val question: Color,
+    val deviceMaintenance: Color,
+    val siteRotation: Color,
+    val settings: Color,
+    // Navigation screens
+    val treatments: Color,
+    val statistics: Color,
+    val navigation: Color,          // history browser, setup wizard, maintenance, configuration
+    // Running mode belt graph background colors (no ElementType)
     val loopClosed: Color,
     val loopOpened: Color,
     val loopLgs: Color,
     val loopDisabled: Color,
     val loopSuperBolus: Color,
     val loopDisconnected: Color,
-    val loopSuspended: Color,
-    val sensitivity: Color,
-    val automation: Color
+    val loopSuspended: Color
 )
 
 /**
@@ -77,12 +63,12 @@ internal val LightElementColors = ElementColors(
     tempBasal = Color(0xFF00FFFF),       // actionBasal
     tempTarget = Color(0xFF6BD16B),      // tempTargetConfirmation
     profileSwitch = Color(0xFF000000),   // profileSwitch (black for light mode)
-    careportal = Color(0xFFFEAF05),      // note
+    careportal = Color(0xFFFEAF05),
     runningMode = Color(0xFFFFB400),     // hardcoded in drawable
     userEntry = Color(0xFF66BB6A),       // userOption
-    loop = Color(0xFF00C03E),            // Additional UserEntry for loop
-    pump = Color(0xFF939393),            // Additional UserEntry for pump
-    aaps = Color(0xFF666666),            // Additional UserEntry for AAPS
+    loop = Color(0xFF00C03E),            // loop
+    pump = Color(0xFF939393),            // pump
+    aaps = Color(0xFF666666),            // AAPS
     cgmXdrip = Color(0xFFE93057),        // colorCalibrationButton
     cgmDex = Color(0xFF777777),          // byodaGray
     calibration = Color(0xFFE93057),     // colorCalibrationButton
@@ -90,8 +76,20 @@ internal val LightElementColors = ElementColors(
     bgCheck = Color(0xFFE93057),         // calibrationButtonColor
     exercise = Color(0xFF42A5F5),        // exercise
     announcement = Color(0xFFCF8BFE),    // announcement
-    cob = Color(0xFFFF5722),      // deep orange — distinct from COB line (#FB8C00)
-    // Running mode belt graph background colors (semi-transparent for belt overlay)
+    cob = Color(0xFFFF5722),             // deep orange — distinct from COB line (#FB8C00)
+    sensitivity = Color(0xFF008585),     // teal — autosens icon color
+    automation = Color(0xFF66BB6A),      // green — same as userEntry light
+    bolusWizard = Color(0xFF66BB6A),     // moved from generalColors.calculator
+    note = Color(0xFFFEAF05),            // was careportal
+    question = Color(0xFFFF9800),        // distinct from note — amber/orange
+    deviceMaintenance = Color(0xFF78909C), // blue-grey — sensor/battery/cannula
+    siteRotation = Color(0xFF5C6BC0),    // indigo
+    settings = Color(0xFF546E7A),         // blue-grey 600 — distinct from pump grey
+    // Navigation screens
+    treatments = Color(0xFF00897B),       // teal 600
+    statistics = Color(0xFF5C6BC0),       // indigo 400
+    navigation = Color(0xFF607D8B),       // blue-grey 500
+    // Running mode belt graph background colors
     loopClosed = Color(0xFF4CAF50),       // green — normal operating state
     loopOpened = Color(0xFF4983D7),       // blue
     loopLgs = Color(0xFF800080),          // purple
@@ -99,8 +97,6 @@ internal val LightElementColors = ElementColors(
     loopSuperBolus = Color(0xFFFFA500),   // orange
     loopDisconnected = Color(0xFF939393), // gray
     loopSuspended = Color(0xFFF6CE22),    // yellow
-    sensitivity = Color(0xFF008585),        // teal — autosens icon color
-    automation = Color(0xFF66BB6A)          // green — same as userEntry light (userOptionColor)
 )
 
 /**
@@ -108,27 +104,39 @@ internal val LightElementColors = ElementColors(
  * Colors match the dark theme values from colors.xml (night folder).
  */
 internal val DarkElementColors = ElementColors(
-    insulin = Color(0xFF67DFE8),         // insulin - bolus (same in both modes)
+    insulin = Color(0xFF67DFE8),         // insulin - bolus
     carbs = Color(0xFFFFAE01),           // colorCarbsButton (night)
     extendedBolus = Color(0xFFCF8BFE),   // extendedBolus (night)
-    tempBasal = Color(0xFF00FFFF),       // actionBasal (same in both modes)
+    tempBasal = Color(0xFF00FFFF),       // actionBasal
     tempTarget = Color(0xFF77DD77),      // tempTargetConfirmation (night)
     profileSwitch = Color(0xFFFFFFFF),   // profileSwitch (white for dark mode)
-    careportal = Color(0xFFFEAF05),      // note (same in both modes)
-    runningMode = Color(0xFFFFB400),     // hardcoded in drawable (same in both modes)
+    careportal = Color(0xFFFEAF05),
+    runningMode = Color(0xFFFFB400),     // hardcoded in drawable
     userEntry = Color(0xFF6AE86D),       // userOption (night)
-    loop = Color(0xFF00C03E),            // Additional UserEntry for loop
-    pump = Color(0xFF939393),            // Additional UserEntry for pump
-    aaps = Color(0xFFBBBBBB),            // Additional UserEntry for AAPS
-    cgmXdrip = Color(0xFFE93057),        // colorCalibrationButton (same both modes)
+    loop = Color(0xFF00C03E),            // loop
+    pump = Color(0xFF939393),            // pump
+    aaps = Color(0xFFBBBBBB),            // AAPS
+    cgmXdrip = Color(0xFFE93057),        // colorCalibrationButton
     cgmDex = Color(0xFF999999),          // byodaGray (night)
-    calibration = Color(0xFFE93057),     // colorCalibrationButton (same both modes)
+    calibration = Color(0xFFE93057),     // colorCalibrationButton
     quickWizard = Color(0xFFFFAE01),     // colorQuickWizardButton (night)
-    bgCheck = Color(0xFFE93057),         // calibrationButtonColor (same both modes)
-    exercise = Color(0xFF42A5F5),        // exercise (same both modes)
-    announcement = Color(0xFFCF8BFE),    // announcement (same both modes)
-    cob = Color(0xFFFFAB91),      // soft salmon — distinct from COB line (#FFB74D)
-    // Running mode belt graph background colors (same in both modes)
+    bgCheck = Color(0xFFE93057),         // calibrationButtonColor
+    exercise = Color(0xFF42A5F5),        // exercise
+    announcement = Color(0xFFCF8BFE),    // announcement
+    cob = Color(0xFFFFAB91),             // soft salmon — distinct from COB line (#FFB74D)
+    sensitivity = Color(0xFF008585),     // teal — autosens icon color
+    automation = Color(0xFF6AE86D),      // green — same as userEntry dark
+    bolusWizard = Color(0xFF67E86A),     // moved from generalColors.calculator (night)
+    note = Color(0xFFFEAF05),            // was careportal
+    question = Color(0xFFFFB74D),        // distinct from note — warm amber
+    deviceMaintenance = Color(0xFF90A4AE), // blue-grey (night)
+    siteRotation = Color(0xFF7986CB),    // indigo (night)
+    settings = Color(0xFF78909C),         // blue-grey 400 (night)
+    // Navigation screens
+    treatments = Color(0xFF26A69A),       // teal 400 (night)
+    statistics = Color(0xFF7986CB),       // indigo 300 (night)
+    navigation = Color(0xFF90A4AE),       // blue-grey 300 (night)
+    // Running mode belt graph background colors
     loopClosed = Color(0xFF4CAF50),       // green — normal operating state
     loopOpened = Color(0xFF4983D7),       // blue
     loopLgs = Color(0xFF800080),          // purple
@@ -136,8 +144,6 @@ internal val DarkElementColors = ElementColors(
     loopSuperBolus = Color(0xFFFFA500),   // orange
     loopDisconnected = Color(0xFF939393), // gray
     loopSuspended = Color(0xFFF6CE22),    // yellow
-    sensitivity = Color(0xFF008585),        // teal — autosens icon color
-    automation = Color(0xFF6AE86D)          // green — same as userEntry dark
 )
 
 /**

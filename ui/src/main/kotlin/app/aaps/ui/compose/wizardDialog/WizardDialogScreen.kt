@@ -73,16 +73,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.aaps.core.interfaces.profile.ProfileUtil
 import app.aaps.core.interfaces.utils.DecimalFormatter
 import app.aaps.core.ui.compose.AapsTheme
+import app.aaps.core.ui.compose.ElementType
+import app.aaps.core.ui.compose.color
 import app.aaps.core.ui.compose.AapsTopAppBar
 import app.aaps.core.ui.compose.NumberInputRow
 import app.aaps.core.ui.compose.clearFocusOnTap
 import app.aaps.core.ui.compose.dialogs.OkCancelDialog
-import app.aaps.core.ui.compose.icons.IcBgCheck
-import app.aaps.core.ui.compose.icons.IcBolus
 import app.aaps.core.ui.compose.icons.IcBread
 import app.aaps.core.ui.compose.icons.IcCake
-import app.aaps.core.ui.compose.icons.IcCalculator
-import app.aaps.core.ui.compose.icons.IcCarbs
+import app.aaps.core.ui.compose.icon
+import app.aaps.core.ui.compose.labelResId
 import app.aaps.core.ui.compose.icons.IcPizza
 import app.aaps.core.ui.compose.icons.IcTtManual
 import app.aaps.core.ui.compose.preference.AdaptivePreferenceList
@@ -154,10 +154,10 @@ fun WizardDialogScreen(
     // No action dialog
     if (showNoAction) {
         OkCancelDialog(
-            title = stringResource(CoreUiR.string.boluswizard),
+            title = stringResource(ElementType.BOLUS_WIZARD.labelResId()),
             message = stringResource(CoreUiR.string.no_action_selected),
-            icon = IcCalculator,
-            iconTint = AapsTheme.generalColors.calculator,
+            icon = ElementType.BOLUS_WIZARD.icon(),
+            iconTint = ElementType.BOLUS_WIZARD.color(),
             onConfirm = { showNoAction = false },
             onDismiss = { showNoAction = false }
         )
@@ -169,9 +169,9 @@ fun WizardDialogScreen(
             onDismissRequest = { showBolusAdvisorPrompt = false },
             icon = {
                 Icon(
-                    imageVector = IcCalculator,
+                    imageVector = ElementType.BOLUS_WIZARD.icon(),
                     contentDescription = null,
-                    tint = AapsTheme.generalColors.calculator
+                    tint = ElementType.BOLUS_WIZARD.color()
                 )
             },
             title = { Text(stringResource(CoreUiR.string.bolus_advisor)) },
@@ -205,10 +205,10 @@ fun WizardDialogScreen(
     if (showAdvisorConfirmation) {
         val summaryLines = viewModel.getAdvisorSummary()
         OkCancelDialog(
-            title = stringResource(CoreUiR.string.boluswizard),
+            title = stringResource(ElementType.BOLUS_WIZARD.labelResId()),
             message = summaryLines.joinToString("<br/>"),
-            icon = IcCalculator,
-            iconTint = AapsTheme.generalColors.calculator,
+            icon = ElementType.BOLUS_WIZARD.icon(),
+            iconTint = ElementType.BOLUS_WIZARD.color(),
             onConfirm = {
                 viewModel.executeBolusAdvisor()
                 onNavigateBack()
@@ -221,10 +221,10 @@ fun WizardDialogScreen(
     if (showNormalConfirmation) {
         val summaryLines = viewModel.getConfirmationSummary()
         OkCancelDialog(
-            title = stringResource(CoreUiR.string.boluswizard),
+            title = stringResource(ElementType.BOLUS_WIZARD.labelResId()),
             message = summaryLines.joinToString("<br/>"),
-            icon = IcCalculator,
-            iconTint = AapsTheme.generalColors.calculator,
+            icon = ElementType.BOLUS_WIZARD.icon(),
+            iconTint = ElementType.BOLUS_WIZARD.color(),
             onConfirm = {
                 viewModel.executeNormal()
                 onNavigateBack()
@@ -303,14 +303,14 @@ private fun WizardDialogContent(
                                 Text(
                                     text = stringResource(CoreUiR.string.format_insulin_units, uiState.totalInsulin),
                                     fontWeight = FontWeight.Bold,
-                                    color = AapsTheme.elementColors.insulin
+                                    color = ElementType.INSULIN.color()
                                 )
                             }
                             if (uiState.carbs > 0) {
                                 Text(
                                     text = stringResource(CoreUiR.string.format_carbs, uiState.carbs),
                                     fontWeight = FontWeight.Bold,
-                                    color = AapsTheme.elementColors.carbs
+                                    color = ElementType.CARBS.color()
                                 )
                             }
                             val hasExtra = uiState.percentage != 100 || uiState.directCorrection != 0.0
@@ -320,14 +320,14 @@ private fun WizardDialogContent(
                                     Text(
                                         text = stringResource(CoreUiR.string.format_percent, uiState.percentage),
                                         fontWeight = FontWeight.Bold,
-                                        color = AapsTheme.elementColors.carbs
+                                        color = ElementType.CARBS.color()
                                     )
                                 }
                                 if (uiState.directCorrection != 0.0) {
                                     Text(
                                         text = stringResource(CoreUiR.string.format_insulin_units_signed, uiState.directCorrection),
                                         fontWeight = FontWeight.Bold,
-                                        color = AapsTheme.elementColors.insulin
+                                        color = ElementType.INSULIN.color()
                                     )
                                 }
                                 Text(")", fontWeight = FontWeight.Bold)
@@ -336,10 +336,10 @@ private fun WizardDialogContent(
                             Text(
                                 text = stringResource(R.string.missing_carbs, uiState.carbsEquivalent.toInt()),
                                 fontWeight = FontWeight.Bold,
-                                color = AapsTheme.elementColors.carbs
+                                color = ElementType.CARBS.color()
                             )
                         } else {
-                            Text(stringResource(CoreUiR.string.boluswizard))
+                            Text(stringResource(ElementType.BOLUS_WIZARD.labelResId()))
                         }
                     }
                 },
@@ -570,7 +570,7 @@ private fun WizardDialogContent(
                                 icon = {}
                             ) {
                                 Icon(
-                                    imageVector = IcBgCheck,
+                                    imageVector = ElementType.BG_CHECK.icon(),
                                     contentDescription = stringResource(CoreUiR.string.wizard_include_bg),
                                     modifier = Modifier.size(24.dp)
                                 )
@@ -610,7 +610,7 @@ private fun WizardDialogContent(
                                 icon = {}
                             ) {
                                 Icon(
-                                    imageVector = IcBolus,
+                                    imageVector = ElementType.INSULIN.icon(),
                                     contentDescription = stringResource(CoreUiR.string.wizard_include_iob),
                                     modifier = Modifier.size(24.dp)
                                 )
@@ -623,7 +623,7 @@ private fun WizardDialogContent(
                                 icon = {}
                             ) {
                                 Icon(
-                                    imageVector = IcCarbs,
+                                    imageVector = ElementType.COB.icon(),
                                     contentDescription = stringResource(CoreUiR.string.wizard_include_cob),
                                     modifier = Modifier.size(24.dp)
                                 )

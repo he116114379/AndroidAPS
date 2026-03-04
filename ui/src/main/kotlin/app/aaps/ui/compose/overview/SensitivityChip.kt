@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.aaps.core.ui.compose.AapsTheme
+import app.aaps.core.ui.compose.ElementType
+import app.aaps.core.ui.compose.color
 import app.aaps.core.ui.compose.icons.IcArrowFlat
 import app.aaps.core.ui.compose.icons.IcArrowFortyfiveDown
 import app.aaps.core.ui.compose.icons.IcArrowFortyfiveUp
@@ -38,7 +40,7 @@ internal fun SensitivityChip(
     val textColor = MaterialTheme.colorScheme.onSurfaceVariant
     Surface(
         shape = RoundedCornerShape(6.dp),
-        color = AapsTheme.elementColors.sensitivity.copy(alpha = 0.15f),
+        color = ElementType.SENSITIVITY.color().copy(alpha = 0.15f),
         modifier = modifier.clickable(onClick = onClick)
     ) {
         val chipStyle = AapsTheme.typography.chipLabel
@@ -48,7 +50,7 @@ internal fun SensitivityChip(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = AapsTheme.elementColors.sensitivity,
+                tint = ElementType.SENSITIVITY.color(),
                 modifier = Modifier.size(18.dp)
             )
             if (state.asText.isNotEmpty()) {
@@ -70,7 +72,7 @@ internal fun SensitivityChip(
                 Icon(
                     imageVector = selectIsfArrow(state.isfFrom, state.isfTo),
                     contentDescription = null,
-                    tint = AapsTheme.elementColors.sensitivity,
+                    tint = ElementType.SENSITIVITY.color(),
                     modifier = Modifier.size(14.dp)
                 )
                 Text(
