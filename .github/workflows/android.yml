@@ -1,0 +1,67 @@
+name: AAPS 3.2.0.4 Build CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      variant:
+        description: 'Build variant (fullRelease/partialRelease)'
+        required: true
+        default: 'fullRelease'
+        type: choice
+        options:
+          - fullRelease
+          - partialRelease
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: '3.2.0.4'  # 指定AAPS 3.2.0.4版本分支/标签[[__LINK_ICON]](https://github.com/openaps/AndroidAPSdocs/blob/master/docs/EN/Maintenance/ReleaseNotes.md?f_link_type=f_linkinlinenote&flow_extra=eyJpbmxpbmVfZGlzcGxheV9wb3NpdGlvbiI6MCwiZG9jX3Bvc2l0aW9uIjowLCJkb2NfaWQiOiJjZmVlZTA3MjdiMDQ3MWY2LTdmYTQ4YzIzMDVlY2I5NjgifQ%3D%3D "[__LINK_ICON]")
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # AAPS 3.2.0.4强制要求Java 17[[__LINK_ICON]](https://androidaps.readthedocs.io/en/latest/Maintenance/UpdateAaps3204.html?f_link_type=f_linkinlinenote&flow_extra=eyJpbmxpbmVfZGlzcGxheV9wb3NpdGlvbiI6MCwiZG9jX3Bvc2l0aW9uIjowLCJkb2NfaWQiOiI4MTU0MmZkOWEzYjcwZjZlLWVkYzg1NDM1OThhM2M4Y2YifQ%3D%3D "[__LINK_ICON]")
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 33  # AAPS 3.2.0.4目标API级别
+          build-tools: 33.0.2  # 推荐构建工具版本
+          ndk: 25.1.8937393  # AAPS依赖的NDK版本
+          cmake: 3.22.1
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Decode Keystore
+        if: ${{ github.event.inputs.variant == 'fullRelease' }}
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > app/release.keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+
+      - name: Build AAPS APK
+        run: ./gradlew assemble${{ github.event.inputs.variant }}
+        env:
+          # 签名配置（仅fullRelease需要）
+          KEYSTORE_PATH: app/release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          # AAPS 3.2.0.4编译参数
+          BUILD_TYPE: release
+          AAPS_VERSION: 3.2.0.4
+          AAPS_BUILD_NUMBER: ${{ github.run_number }}
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AAPS-3.2.0.4-${{ github.event.inputs.variant }}
+          path: app/build/outputs/apk/${{ github.event.inputs.variant }}/*.apk
+          retention-days: 14
