@@ -9,10 +9,10 @@ object Versions {
     const val versionCode = 1500
 
     const val compileSdk = 36
-    const val minSdk = 28
-    const val targetSdk = 28
-    const val wearMinSdk = 28
-    const val wearTargetSdk = 28
+    const val minSdk = 27
+    const val targetSdk = 27
+    const val wearMinSdk = 27
+    const val wearTargetSdk = 27
 
     val javaVersion = JavaVersion.VERSION_21
     val jvmTarget = JvmTarget.JVM_21
