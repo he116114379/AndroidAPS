@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
@@ -26,6 +27,7 @@
 
     <!-- To receive data from Aidex -->
     <uses-permission android:name="com.microtechmd.cgms.aidex.permissions.RECEIVE_BG_ESTIMATE" />
+    <uses-sdk tools:overrideLibrary="app.aaps.pump.eopatch.core" />
 
     <application
         android:name="app.aaps.MainApp"
