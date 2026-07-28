@@ -8,11 +8,11 @@ object Versions {
     const val appVersion = "3.4.2.3"
     const val versionCode = 1500
 
-    const val compileSdk = 36
+    const val compileSdk = 28
     const val minSdk = 27
-    const val targetSdk = 27
+    const val targetSdk = 28
     const val wearMinSdk = 27
-    const val wearTargetSdk = 27
+    const val wearTargetSdk = 28
 
     val javaVersion = JavaVersion.VERSION_21
     val jvmTarget = JvmTarget.JVM_21
