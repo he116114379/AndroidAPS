@@ -15,7 +15,7 @@ object ThreadUtil {
     @Suppress("DEPRECATION")
     fun threadId() =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA)
-            Thread.currentThread().threadId()
+            Thread.currentThread().Id()
         else
             Thread.currentThread().id
 
