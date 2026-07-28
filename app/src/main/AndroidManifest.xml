@@ -27,7 +27,7 @@ xmlns:tools="http://schemas.android.com/tools">
 
     <!-- To receive data from Aidex -->
     <uses-permission android:name="com.microtechmd.cgms.aidex.permissions.RECEIVE_BG_ESTIMATE" />
-    <uses-sdk tools:overrideLibrary="app.aaps.pump.eopatch.core" />
+    <uses-sdk tools:overrideLibrary="app.aaps.pump.eopatch.core,com.joanzapata.iconify" />
 
     <application
         android:name="app.aaps.MainApp"
